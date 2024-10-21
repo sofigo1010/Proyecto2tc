@@ -4,13 +4,13 @@ def generate_combinations(symbols, nullable_symbols):
     options = []
     for symbol in symbols:
         if symbol in nullable_symbols:
-            options.append([symbol, None])  # None representa omisión
+            options.append([symbol, None])  
         else:
             options.append([symbol])
 
     all_combinations = set()
     for combination in product(*options):
-        # Remover valores None (símbolos omitidos)
+        
         new_combination = tuple(s for s in combination if s is not None)
         if new_combination:
             all_combinations.add(new_combination)

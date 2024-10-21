@@ -4,14 +4,14 @@ class CYKAlgorithm:
     def __init__(self, cnf_grammar, terminals, start_symbol):
         self.cnf_grammar = cnf_grammar
         self.parse_tree = None
-        self.terminals = terminals  # Añadimos los terminales como parámetro
+        self.terminals = terminals  
         self.start_symbol = start_symbol
 
     def tokenize_sentence(self, sentence):
         """
         Tokeniza la oración de entrada utilizando los terminales conocidos.
         """
-        # Ordenar los terminales por longitud descendente
+        
         terminals_sorted = sorted(self.terminals, key=len, reverse=True)
         tokens = []
         index = 0
@@ -27,10 +27,10 @@ class CYKAlgorithm:
                     break
             if not match_found:
                 if sentence[index].isspace():
-                    # Ignorar espacios
+                    
                     index += 1
                 else:
-                    # Manejar símbolos no reconocidos
+                    
                     unknown_symbol = sentence[index]
                     tokens.append(unknown_symbol)
                     index += 1
@@ -39,13 +39,13 @@ class CYKAlgorithm:
     def parse(self, sentence):
         start_time = time.time()
 
-        # Tokenizar la oración
+        
         words = self.tokenize_sentence(sentence)
         n = len(words)
         table = [[set() for _ in range(n)] for _ in range(n)]
         backpointers = [[{} for _ in range(n)] for _ in range(n)]
 
-        # Paso 1: Inicialización
+       
         for i, word in enumerate(words):
             for non_terminal, productions in self.cnf_grammar.items():
                 for production in productions:
@@ -53,7 +53,7 @@ class CYKAlgorithm:
                         table[i][i].add(non_terminal)
                         backpointers[i][i][non_terminal] = word
 
-        # Paso 2: Rellenar la tabla
+        
         for length in range(2, n + 1):
             for i in range(n - length + 1):
                 j = i + length - 1
@@ -66,7 +66,7 @@ class CYKAlgorithm:
                                     table[i][j].add(non_terminal)
                                     backpointers[i][j][non_terminal] = (B, C, k)
 
-        # Obtener el símbolo inicial de la gramática
+        
         start_symbol = self.start_symbol
         accepted = start_symbol in table[0][n - 1]
         end_time = time.time()

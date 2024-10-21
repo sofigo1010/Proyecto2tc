@@ -25,18 +25,18 @@ def format_grammar(grammar):
     return '\n'.join(formatted_grammar)
 
 def main():
-    # Cargar gramática desde archivo
+
     grammar_file = input("Ingrese el nombre del archivo de gramática (por ejemplo, 'grammar.txt'): ")
     
     try:
         loader = GrammarLoader(grammar_file)
         grammar = loader.load_grammar()
         
-        # Mostrar gramática cargada
+
         print("\n=== Gramática original ===")
         print(format_grammar(grammar))
 
-        # Eliminar producciones-ε
+      
         print("\n=== Iniciando el proceso de eliminación de producciones-ε ===")
         epsilon_remover = EpsilonRemover(grammar)
         grammar_without_epsilon = epsilon_remover.remove_epsilon_productions()
@@ -44,7 +44,7 @@ def main():
         print("\n=== Gramática después de eliminar producciones-ε ===")
         print(format_grammar(grammar_without_epsilon))
 
-        # Eliminar producciones unarias
+       
         print("\n=== Iniciando el proceso de eliminación de producciones unarias ===")
         unary_remover = UnaryRemover(grammar_without_epsilon)
         grammar_without_unary = unary_remover.remove_unary_productions()
@@ -52,7 +52,7 @@ def main():
         print("\n=== Gramática después de eliminar producciones unarias ===")
         print(format_grammar(grammar_without_unary))
 
-        # Eliminar símbolos inútiles
+       
         print("\n=== Iniciando el proceso de eliminación de símbolos inútiles ===")
         useless_remover = UselessSymbolsRemover(grammar_without_unary)
         grammar_without_useless = useless_remover.remove_useless_symbols()
@@ -60,25 +60,25 @@ def main():
         print("\n=== Gramática después de eliminar símbolos inútiles ===")
         print(format_grammar(grammar_without_useless))
 
-        # Convertir a CNF
+      
         print("\n=== Iniciando la conversión a Forma Normal de Chomsky (CNF) ===")
         cnf_converter = CNFConverter(grammar_without_useless, loader.start_symbol)
         cnf_grammar, cnf_start_symbol = cnf_converter.convert_to_cnf()
 
-        # Mostrar la gramática en CNF
+        
         print("\n=== Gramática en Forma Normal de Chomsky (CNF) ===")
         print(format_grammar(cnf_grammar))
 
-        # Ingresar una oración en inglés
+        
         sentence = input("\nIngrese la oración en inglés para analizar: ")
 
-        # Aplicar el algoritmo CYK
+       
         print("\n=== Iniciando el algoritmo CYK ===")
         cyk = CYKAlgorithm(cnf_grammar, list(loader.terminals), cnf_start_symbol)
         print("Terminales:", loader.terminals)
         accepted, elapsed_time = cyk.parse(sentence)
 
-        # Mostrar el resultado y el árbol de parseo
+       
         if accepted:
             print(f"\nSÍ, la oración '{sentence}' pertenece al lenguaje.")
             print(f"Tiempo de ejecución: {elapsed_time:.6f} segundos")

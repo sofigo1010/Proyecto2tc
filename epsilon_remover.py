@@ -13,7 +13,7 @@ class EpsilonRemover:
                     self.nullable.add(non_terminal)
                     print(f"  - El símbolo '{non_terminal}' es anulable porque tiene la producción 'ε'.")
         print(f"Símbolos anulables iniciales: {self.nullable}\n")
-        # Propagar anulabilidad
+        
         changed = True
         while changed:
             changed = False

@@ -6,7 +6,7 @@ class UselessSymbolsRemover:
         """
         Elimina los símbolos inútiles y no terminales inalcanzables de la gramática.
         """
-        # Paso 1: Encontrar los símbolos generativos
+       
         generative = set()
         changed = True
         while changed:
@@ -19,9 +19,9 @@ class UselessSymbolsRemover:
                             changed = True
                             break
 
-        # Paso 2: Encontrar los símbolos alcanzables
+        
         reachable = set()
-        # Utilizamos el primer símbolo del diccionario de la gramática como símbolo inicial
+        
         initial_symbol = next(iter(self.grammar))
         to_process = [initial_symbol]
 
@@ -34,7 +34,7 @@ class UselessSymbolsRemover:
                         if symbol in self.grammar and symbol not in reachable:
                             to_process.append(symbol)
 
-        # Paso 3: Crear la nueva gramática sin símbolos inútiles
+        
         new_grammar = {}
         for non_terminal in self.grammar:
             if non_terminal in reachable and non_terminal in generative:
