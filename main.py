@@ -62,8 +62,8 @@ def main():
 
         # Convertir a CNF
         print("\n=== Iniciando la conversión a Forma Normal de Chomsky (CNF) ===")
-        cnf_converter = CNFConverter(grammar_without_useless)
-        cnf_grammar = cnf_converter.convert_to_cnf()
+        cnf_converter = CNFConverter(grammar_without_useless, loader.start_symbol)
+        cnf_grammar, cnf_start_symbol = cnf_converter.convert_to_cnf()
 
         # Mostrar la gramática en CNF
         print("\n=== Gramática en Forma Normal de Chomsky (CNF) ===")
@@ -74,7 +74,8 @@ def main():
 
         # Aplicar el algoritmo CYK
         print("\n=== Iniciando el algoritmo CYK ===")
-        cyk = CYKAlgorithm(cnf_grammar, list(loader.terminals))
+        cyk = CYKAlgorithm(cnf_grammar, list(loader.terminals), cnf_start_symbol)
+        print("Terminales:", loader.terminals)
         accepted, elapsed_time = cyk.parse(sentence)
 
         # Mostrar el resultado y el árbol de parseo

@@ -14,14 +14,16 @@ class UselessSymbolsRemover:
             for non_terminal, productions in self.grammar.items():
                 if non_terminal not in generative:
                     for production in productions:
-                        if all(symbol in generative or not symbol.isupper() for symbol in production):
+                        if all(symbol in generative or symbol not in self.grammar for symbol in production):
                             generative.add(non_terminal)
                             changed = True
                             break
 
         # Paso 2: Encontrar los símbolos alcanzables
         reachable = set()
-        to_process = ['S']
+        # Utilizamos el primer símbolo del diccionario de la gramática como símbolo inicial
+        initial_symbol = next(iter(self.grammar))
+        to_process = [initial_symbol]
 
         while to_process:
             current = to_process.pop()
@@ -29,7 +31,7 @@ class UselessSymbolsRemover:
                 reachable.add(current)
                 for production in self.grammar[current]:
                     for symbol in production:
-                        if symbol.isupper() and symbol not in reachable:
+                        if symbol in self.grammar and symbol not in reachable:
                             to_process.append(symbol)
 
         # Paso 3: Crear la nueva gramática sin símbolos inútiles
@@ -38,7 +40,7 @@ class UselessSymbolsRemover:
             if non_terminal in reachable and non_terminal in generative:
                 new_productions = []
                 for production in self.grammar[non_terminal]:
-                    if all(symbol in generative or not symbol.isupper() for symbol in production):
+                    if all(symbol in generative or symbol not in self.grammar for symbol in production):
                         new_productions.append(production)
                 if new_productions:
                     new_grammar[non_terminal] = new_productions

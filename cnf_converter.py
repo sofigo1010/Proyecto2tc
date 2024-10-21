@@ -1,8 +1,9 @@
 class CNFConverter:
-    def __init__(self, grammar):
+    def __init__(self, grammar, start_symbol):
         self.grammar = grammar
         self.new_symbol_count = 0
         self.terminal_cache = {}
+        self.start_symbol = start_symbol 
 
     def get_new_symbol(self):
         self.new_symbol_count += 1
@@ -13,6 +14,7 @@ class CNFConverter:
 
     def convert_to_cnf(self):
         new_grammar = {}
+        new_start_symbol = self.start_symbol
         
         # Paso 1: Reemplazar terminales en producciones de longitud > 1
         for non_terminal, productions in self.grammar.items():
@@ -55,4 +57,4 @@ class CNFConverter:
         # Añadimos las nuevas producciones al gramática actualizada
         for new_symbol, production in symbols_to_add.items():
             updated_grammar[new_symbol] = [production]
-        return updated_grammar
+        return updated_grammar, new_start_symbol

@@ -1,10 +1,11 @@
 import time 
 
 class CYKAlgorithm:
-    def __init__(self, cnf_grammar, terminals):
+    def __init__(self, cnf_grammar, terminals, start_symbol):
         self.cnf_grammar = cnf_grammar
         self.parse_tree = None
         self.terminals = terminals  # Añadimos los terminales como parámetro
+        self.start_symbol = start_symbol
 
     def tokenize_sentence(self, sentence):
         """
@@ -29,7 +30,7 @@ class CYKAlgorithm:
                     # Ignorar espacios
                     index += 1
                 else:
-                    # Manejar símbolos no reconocidos (puedes lanzar una excepción si lo prefieres)
+                    # Manejar símbolos no reconocidos
                     unknown_symbol = sentence[index]
                     tokens.append(unknown_symbol)
                     index += 1
@@ -65,11 +66,13 @@ class CYKAlgorithm:
                                     table[i][j].add(non_terminal)
                                     backpointers[i][j][non_terminal] = (B, C, k)
 
-        accepted = 'S' in table[0][n - 1]
+        # Obtener el símbolo inicial de la gramática
+        start_symbol = self.start_symbol
+        accepted = start_symbol in table[0][n - 1]
         end_time = time.time()
 
         if accepted:
-            self.parse_tree = self.build_parse_tree(backpointers, 0, n - 1, 'S')
+            self.parse_tree = self.build_parse_tree(backpointers, 0, n - 1, start_symbol)
 
         return accepted, end_time - start_time
 

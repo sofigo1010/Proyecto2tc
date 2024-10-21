@@ -6,6 +6,7 @@ class GrammarLoader:
         self.file_path = file_path
         self.non_terminals = set()
         self.terminals = set()
+        self.start_symbol = None  # Añadimos esta línea
 
     def load_grammar(self):
         """
@@ -27,6 +28,8 @@ class GrammarLoader:
             if not line or '->' not in line:
                 continue
             left_side, _ = map(str.strip, line.split('->'))
+            if self.start_symbol is None:
+                self.start_symbol = left_side  # Almacenamos el símbolo inicial
             self.non_terminals.add(left_side)
 
         # Segunda pasada: recopilar los terminales
@@ -40,7 +43,7 @@ class GrammarLoader:
             for prod in productions:
                 if prod != 'ε':
                     # Dividimos la producción en símbolos
-                    symbols = re.findall(r'\b\w+\b', prod)
+                    symbols = re.findall(r'\b\w+\b|\S', prod)
                     for symbol in symbols:
                         if symbol not in self.non_terminals and not symbol.isupper():
                             self.terminals.add(symbol)
